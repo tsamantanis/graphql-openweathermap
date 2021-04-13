@@ -13,6 +13,11 @@ const schema = buildSchema(`
     type Weather {
         temperature: Float!
         description: String!
+        feels_like: Float!
+        temp_min: Float!
+        temp_max: Float!
+        pressure: Float!
+        humidity: Float!
     }
 
     type Query {
@@ -25,9 +30,15 @@ const root = {
         const url = `https://api.openweathermap.org/data/2.5/weather?zip=${ zip }&appid=${ process.env.OPENWEATHERMAP_API_KEY }&units=${ units }`
         const res = await fetch(url)
         const json = await res.json()
-        const temperature = json.main.temp
-        const description = json.weather[0].description
-        return { temperature, description }
+        return {
+            temperature: json.main.temp,
+            description: json.weather[0].description,
+            feels_like: json.main.feels_like,
+            temp_min: json.main.temp_min,
+            temp_max: json.main.temp_max,
+            pressure: json.main.pressure,
+            humidity: json.main.humidity
+        }
     }
 }
 
