@@ -11,13 +11,15 @@ const schema = buildSchema(`
         imperial
     }
     type Weather {
-        temperature: Float!
-        description: String!
-        feels_like: Float!
-        temp_min: Float!
-        temp_max: Float!
-        pressure: Float!
-        humidity: Float!
+        temperature: Float
+        description: String
+        feels_like: Float
+        temp_min: Float
+        temp_max: Float
+        pressure: Float
+        humidity: Float
+        cod: Int
+        message: String
     }
 
     type Query {
@@ -31,13 +33,15 @@ const root = {
         const res = await fetch(url)
         const json = await res.json()
         return {
-            temperature: json.main.temp,
-            description: json.weather[0].description,
-            feels_like: json.main.feels_like,
-            temp_min: json.main.temp_min,
-            temp_max: json.main.temp_max,
-            pressure: json.main.pressure,
-            humidity: json.main.humidity
+            temperature: json.cod === 200 ? json.main.temp : null,
+            description: json.cod === 200 ? json.weather[0].description : null,
+            feels_like: json.cod === 200 ? json.main.feels_like : null,
+            temp_min: json.cod === 200 ? json.main.temp_min : null,
+            temp_max: json.cod === 200 ? json.main.temp_max : null,
+            pressure: json.cod === 200 ? json.main.pressure : null,
+            humidity: json.cod === 200 ? json.main.humidity : null,
+            cod: parseInt(json.cod),
+            message: json.message
         }
     }
 }
